@@ -6,3 +6,5 @@ The data contains information on all individual properties at the parcel level i
 
 #Collaborators
 Tyler Worthington and Lev Zadvinskiy
+
+#Purpose
