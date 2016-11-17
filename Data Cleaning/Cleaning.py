@@ -1,4 +1,4 @@
-"""Clean up the data to make it easier to understand and use"""
+"""Clean up the data to make it easier to understand and use."""
 import pandas as pd
 #Loading Data
 df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.dta', convert_categoricals=False)
