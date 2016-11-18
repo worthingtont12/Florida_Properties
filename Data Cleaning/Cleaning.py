@@ -38,4 +38,3 @@ map_landuse = {0: "Vacant Residential", 1: "Single Family", 2: "Mobile Homes", 3
 df["landuse_explained"] = df["landuse"].map(map_landuse)
 #recoding landuse to dummy variables
 
-df
