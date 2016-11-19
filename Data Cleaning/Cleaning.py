@@ -79,7 +79,7 @@ dfTest.saledate2 = dfTest[['sale_mo2', 'sale_yr2']].apply(lambda x: ' '.join(x),
 ####converting to date time
 #datetime.datetime.strptime(dfTest.saledate.apply(str), "MM-YYYY")
 
-##############Feature Engineering#############
+##############Feature Creation#############
 #number of years since sale
 dfTest.years_since_last_sale = (dfTest.sale_yr1 - dfTest.sale_yr2)
 
@@ -120,6 +120,5 @@ dfTest.cap = dfTest.landuse.apply(lambda row: in_range(row, 98, 99))
 
 #type = Non-Agricultural Acreage Property
 dfTest.naap = dfTest.landuse.apply(lambda row: in_range(row, 99, 100))
-
 
 #number of days since last sale
