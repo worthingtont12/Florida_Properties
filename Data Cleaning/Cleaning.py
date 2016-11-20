@@ -1,10 +1,33 @@
 """Clean up the data to make it easier to understand and use."""
 import pandas as pd
+import numpy as np
+import smtplib
+from login_info import username, password, recipient1, recipient2, recipient3
 #Loading Data
 df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.dta', convert_categoricals=False)
+##############Functions#####################
+#function that returns True if the value is not missing and returns False if it is missing
+#logic is reversed for use cases below
 
-#relabeling levels
-#use codes
+
+def notna(obs):
+    if np.isnan(obs) == False:
+        return True
+    else:
+        return False
+
+#function that returns true if obs is in range specified
+
+
+def in_range(obs,range_start,range_end):
+    if obs in range(range_start,range_end):
+        return True
+    else:
+        return False
+
+
+##############Relabeling Levels#############
+#redefining use codes to descriptive code
 df['landuse'].astype('category')
 map_landuse = {0: "Vacant Residential", 1: "Single Family", 2: "Mobile Homes", 3: "Multi-family - 10 units or more",
 4: "Condominiums", 5: "Cooperatives", 6: "Retirement Homes not eligible for exemption.", 7: "Miscellaneous Residential (migrant camps, boarding homes, etc.)",
@@ -36,4 +59,81 @@ map_landuse = {0: "Vacant Residential", 1: "Single Family", 2: "Mobile Homes", 3
 97: "Outdoor recreational or parkland, or high-water recharge subject to classified use assessment.", 98: "Centrally assessed Non-Agricultural Acreage Property", 99: "Acreage not zoned agricultural with or without extra features"}
 
 df["landuse_explained"] = df["landuse"].map(map_landuse)
-#recoding landuse to dummy variables
+
+#subsetting for observation for when a sale was made in 2014
+dfTest = df[~pd.isnull(df.sale_prc1)]
+dfTest = dfTest[dfTest.sale_yr1 == 2014]
+
+dfTest = dfTest.dropna(axis=1, how='all').copy()
+
+###combining year and month into one string
+#year 1 month 1
+dfTest.sale_yr1 = dfTest[['sale_yr1']].astype('int').astype('str')
+dfTest.sale_mo1 = dfTest[['sale_mo1']].astype('int').astype('str')
+dfTest.saledate = dfTest[['sale_mo1', 'sale_yr1']].apply(lambda x: '/'.join(x), axis=1)
+
+#year 2 month 2
+dfTest.sale_yr2 = dfTest[['sale_yr2']].astype('int').astype('str')
+dfTest.sale_mo2 = dfTest[['sale_mo2']].astype('int').astype('str')
+dfTest.saledate2 = dfTest[['sale_mo2', 'sale_yr2']].apply(lambda x: '/'.join(x), axis=1)
+
+####converting to date time
+dfTest.saledate = dfTest.saledate.apply(pd.to_datetime)
+
+##############Feature Creation#############
+#number of years since sale
+dfTest.years_since_last_sale = (dfTest.sale_yr1 - dfTest.sale_yr2)
+
+#dummy varible for if sold before
+dfTest.sold_before = dfTest.eff_yr_blt.apply(notna)
+
+#Effective age of property
+dfTest.eff_age = (dfTest.sale_yr1 - dfTest.eff_yr_blt)
+
+#Actual age of property
+dfTest.act_age = (dfTest.sale_yr1 - dfTest.act_yr_blt)
+
+###recoding landuse to dummy variables
+dfTest.landuse = dfTest.landuse.astype(int)
+#type = residential
+dfTest.residential = dfTest.landuse.apply(lambda row: in_range(row, 0, 10))
+
+#type = commercial
+dfTest.commercial = dfTest.landuse.apply(lambda row: in_range(row, 10, 40))
+
+#type = industrial
+dfTest.industrial = dfTest.landuse.apply(lambda row: in_range(row, 40, 50))
+
+#type = agricultural
+dfTest.agricultural = dfTest.landuse.apply(lambda row: in_range(row, 50, 70))
+
+#type = institutional
+dfTest.institutional = dfTest.landuse.apply(lambda row: in_range(row, 70, 80))
+
+#type = government
+dfTest.government = dfTest.landuse.apply(lambda row: in_range(row, 80, 90))
+
+#type = miscellaneous
+dfTest.miscellaneous = dfTest.landuse.apply(lambda row: in_range(row, 90, 97))
+
+#type = Centrally Assessed Property
+dfTest.cap = dfTest.landuse.apply(lambda row: in_range(row, 98, 99))
+
+#type = Non-Agricultural Acreage Property
+dfTest.naap = dfTest.landuse.apply(lambda row: in_range(row, 99, 100))
+
+#difference between sale price and just value
+dfTest.diff_btwn_prc_jv =(dfTest.sale_prc1 - dfTest.jv)
+dfTest.diff_pct = ((dfTest.diff_btwn_prc_jv / dfTest.jv)*100)
+
+#number of days since last sale
+
+#Email when finished
+server = smtplib.SMTP("smtp.gmail.com", 587)
+server.starttls()
+
+server.login(username, password)
+
+server.sendmail(username, recipient1, 'Case study script is done')
+server.sendmail(username, recipient2, 'Case study script is done')
+server.sendmail(username, recipient3, 'Case study script is done')
