@@ -1,7 +1,8 @@
 """Clean up the data to make it easier to understand and use."""
 import pandas as pd
 import numpy as np
-import datetime
+import smtplib
+from login_info import username, password, recipient1, recipient2, recipient3
 #Loading Data
 df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.dta', convert_categoricals=False)
 ##############Functions#####################
@@ -69,15 +70,15 @@ dfTest = dfTest.dropna(axis=1, how='all').copy()
 #year 1 month 1
 dfTest.sale_yr1 = dfTest[['sale_yr1']].astype('int').astype('str')
 dfTest.sale_mo1 = dfTest[['sale_mo1']].astype('int').astype('str')
-dfTest.saledate = dfTest[['sale_mo1', 'sale_yr1']].apply(lambda x: ' '.join(x), axis=1)
+dfTest.saledate = dfTest[['sale_mo1', 'sale_yr1']].apply(lambda x: '/'.join(x), axis=1)
 
 #year 2 month 2
 dfTest.sale_yr2 = dfTest[['sale_yr2']].astype('int').astype('str')
 dfTest.sale_mo2 = dfTest[['sale_mo2']].astype('int').astype('str')
-dfTest.saledate2 = dfTest[['sale_mo2', 'sale_yr2']].apply(lambda x: ' '.join(x), axis=1)
+dfTest.saledate2 = dfTest[['sale_mo2', 'sale_yr2']].apply(lambda x: '/'.join(x), axis=1)
 
 ####converting to date time
-#datetime.datetime.strptime(dfTest.saledate.apply(str), "MM-YYYY")
+dfTest.saledate = dfTest.saledate.apply(pd.to_datetime)
 
 ##############Feature Creation#############
 #number of years since sale
@@ -122,3 +123,13 @@ dfTest.cap = dfTest.landuse.apply(lambda row: in_range(row, 98, 99))
 dfTest.naap = dfTest.landuse.apply(lambda row: in_range(row, 99, 100))
 
 #number of days since last sale
+
+#Email when finished
+server = smtplib.SMTP("smtp.gmail.com", 587)
+server.starttls()
+
+server.login(username, password)
+
+server.sendmail(username, recipient1, 'Case study script is done')
+server.sendmail(username, recipient2, 'Case study script is done')
+server.sendmail(username, recipient3, 'Case study script is done')
