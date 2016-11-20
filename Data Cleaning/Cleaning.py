@@ -59,6 +59,7 @@ map_landuse = {0: "Vacant Residential", 1: "Single Family", 2: "Mobile Homes", 3
 97: "Outdoor recreational or parkland, or high-water recharge subject to classified use assessment.", 98: "Centrally assessed Non-Agricultural Acreage Property", 99: "Acreage not zoned agricultural with or without extra features"}
 
 df["landuse_explained"] = df["landuse"].map(map_landuse)
+<<<<<<< HEAD
 
 #subsetting for observation for when a sale was made in 2014
 dfTest = df[~pd.isnull(df.sale_prc1)]
@@ -137,3 +138,7 @@ server.login(username, password)
 server.sendmail(username, recipient1, 'Case study script is done')
 server.sendmail(username, recipient2, 'Case study script is done')
 server.sendmail(username, recipient3, 'Case study script is done')
+=======
+#recoding landuse to dummy variables
+
+>>>>>>> fa179bcdba9f78df1f97f6085359f1f2993b796b
