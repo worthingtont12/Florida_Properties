@@ -122,6 +122,10 @@ dfTest.cap = dfTest.landuse.apply(lambda row: in_range(row, 98, 99))
 #type = Non-Agricultural Acreage Property
 dfTest.naap = dfTest.landuse.apply(lambda row: in_range(row, 99, 100))
 
+#difference between sale price and just value
+dfTest.diff_btwn_prc_jv =(dfTest.sale_prc1 - dfTest.jv)
+dfTest.diff_pct = ((dfTest.diff_btwn_prc_jv / dfTest.jv)*100)
+
 #number of days since last sale
 
 #Email when finished
