@@ -1,0 +1,5 @@
+username = "worthingtont12@gmail.com"
+password = "fsu2016!!"
+recipient1 = "tjw4ry@virginia.edu"
+recipient2 = "lz4uc@virginia.edu"
+recipient3 = "mrr4kj@virginia.edu"

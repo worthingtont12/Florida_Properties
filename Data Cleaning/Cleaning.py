@@ -138,7 +138,3 @@ server.login(username, password)
 server.sendmail(username, recipient1, 'Case study script is done')
 server.sendmail(username, recipient2, 'Case study script is done')
 server.sendmail(username, recipient3, 'Case study script is done')
-=======
-#recoding landuse to dummy variables
-
->>>>>>> fa179bcdba9f78df1f97f6085359f1f2993b796b
