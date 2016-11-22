@@ -129,6 +129,16 @@ dfTest.diff_pct = ((dfTest.diff_btwn_prc_jv / dfTest.jv)*100)
 
 #number of days since last sale
 
+# Compute mean for census block 'Just Value' and add as column in dataframe; currently mean is based off properties in CB WITH
+# same landuse code
+dfTest['Blk_Val'] = dfTest_cb.groupby([dfTest_cb['census_bk'], dfTest_cb['landuse']])['jv'].transform('mean')
+
+# Compute season-of-sale
+dfTest['sale_mo1'].astype('category')
+map_landuse = {1: "Winter", 2: "Winter", 3: "Spring", 4: "Spring", 5: "Spring", 6: "Summer", 7: "Summer",
+8: "Summer", 9: "Fall", 10: "Fall", 11: "Fall", 12: "Winter" }
+dfTest["sale_season1"] = dfTest["sale_mo1"].map(map_landuse)
+
 #Email when finished
 server = smtplib.SMTP("smtp.gmail.com", 587)
 server.starttls()
