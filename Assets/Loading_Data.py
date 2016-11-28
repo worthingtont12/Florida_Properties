@@ -3,7 +3,7 @@ import pandas as pd
 fulldf = pd.DataFrame()
 listdf = []
 for i in range(11, 78):
-    df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal'+str(i)+'rts2014.dta',convert_categoricals=False, convert_missing=True)
+    df = pd.read_stata('C:/Users/hexel/Documents/R/SYS6018/CaseFinal/NAL2014/nal'+str(i)+'rts2014.dta',convert_categoricals=False, convert_missing=True)
     df['County_Code'] = i
     listdf.append(df)
 yeardf = pd.concat(listdf)
