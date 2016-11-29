@@ -12,4 +12,3 @@ This project is done as a final project for the Fall 2016 Data Mining Course. Al
 
 #Collaborators
 Tyler Worthington , Lev Zadvinskiy, and Mark Rooney.
-
