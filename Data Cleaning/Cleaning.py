@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 import smtplib
-from login_info import username, password, recipient1, recipient2, recipient3
+#from login_info import username, password, recipient1, recipient2, recipient3
 # Loading Data
 df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.dta',
                    convert_categoricals=False)
@@ -137,11 +137,13 @@ map_season = {1: "Winter", 2: "Winter", 3: "Spring", 4: "Spring", 5: "Spring", 6
 dfTest["sale_season1"] = dfTest["sale_mo1"].map(map_season)
 
 # Email when finished
-server = smtplib.SMTP("smtp.gmail.com", 587)
-server.starttls()
+# server = smtplib.SMTP("smtp.gmail.com", 587)
+# server.starttls()
+#
+# server.login(username, password)
+#
+# server.sendmail(username, recipient1, 'Case study script is done')
+# server.sendmail(username, recipient2, 'Case study script is done')
+# server.sendmail(username, recipient3, 'Case study script is done')
 
-server.login(username, password)
-
-server.sendmail(username, recipient1, 'Case study script is done')
-server.sendmail(username, recipient2, 'Case study script is done')
-server.sendmail(username, recipient3, 'Case study script is done')
+dfTest.to_csv('df.csv')
