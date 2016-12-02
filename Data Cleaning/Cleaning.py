@@ -2,9 +2,11 @@
 import pandas as pd
 import numpy as np
 import smtplib
-from login_info import username, password, recipient1, recipient2, recipient3
+from FL_census_2010_import_and_cleaning import census
+
+# from login_info import username, password, recipient1, recipient2, recipient3
 # Loading Data
-df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.dta',
+df = pd.read_stata('C:/Users/hexel/Documents/R/SYS6018/CaseFinal/NAL2014/nal23rts2014.dta',
                    convert_categoricals=False)
 ##############Functions#####################
 # function that returns True if the value is not missing and returns False if it is missing
@@ -137,11 +139,20 @@ map_season = {1: "Winter", 2: "Winter", 3: "Spring", 4: "Spring", 5: "Spring", 6
 dfTest["sale_season1"] = dfTest["sale_mo1"].map(map_season)
 
 # Email when finished
-server = smtplib.SMTP("smtp.gmail.com", 587)
-server.starttls()
+# server = smtplib.SMTP("smtp.gmail.com", 587)
+# server.starttls()
 
-server.login(username, password)
+# server.login(username, password)
 
-server.sendmail(username, recipient1, 'Case study script is done')
-server.sendmail(username, recipient2, 'Case study script is done')
-server.sendmail(username, recipient3, 'Case study script is done')
+# server.sendmail(username, recipient1, 'Case study script is done')
+# server.sendmail(username, recipient2, 'Case study script is done')
+# server.sendmail(username, recipient3, 'Case study script is done')
+
+dfTest2 = pd.merge(dfTest, census, left_on = "co_no", right_on = "COUNTY")
+
+dfTest2.residential
+
+dfTest2.columns[0:100]
+dfTest2.columns[101:201]
+
+dfTest2.const_class.value_counts()
