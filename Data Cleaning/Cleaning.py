@@ -124,6 +124,9 @@ dfTest.cap = dfTest.landuse.apply(lambda row: in_range(row, 98, 99))
 # type = Non-Agricultural Acreage Property
 dfTest.naap = dfTest.landuse.apply(lambda row: in_range(row, 99, 100))
 
+######## Deleting '100's from Sales Price 1
+dfTest.sale_prc1 = dfTest.sale_prc1.replace('100', np.nan)
+
 # difference between sale price and just value
 dfTest.diff_btwn_prc_jv = (dfTest.sale_prc1 - dfTest.jv)
 dfTest.diff_pct = ((dfTest.diff_btwn_prc_jv / dfTest.jv) * 100)
