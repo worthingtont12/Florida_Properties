@@ -12,9 +12,15 @@ df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.
 # #############Functions#####################
 =======
 import smtplib
+<<<<<<< HEAD
+from FL_census_2010_import_and_cleaning import census
+
+# from login_info import username, password, recipient1, recipient2, recipient3
+=======
 #from login_info import username, password, recipient1, recipient2, recipient3
+>>>>>>> master
 # Loading Data
-df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.dta',
+df = pd.read_stata('C:/Users/hexel/Documents/R/SYS6018/CaseFinal/NAL2014/nal23rts2014.dta',
                    convert_categoricals=False)
 ##############Functions#####################
 # function that returns True if the value is not missing and returns False if it is missing
@@ -202,6 +208,25 @@ dfTest = dfTest.drop(["app_stat","ass_dif_trns","ass_trnsfr_fg","atv_strt","av_c
 "twn","twn_orig","vi_cd2","yr_val_trnsf"], axis=1)
 
 # Email when finished
+<<<<<<< HEAD
+# server = smtplib.SMTP("smtp.gmail.com", 587)
+# server.starttls()
+
+# server.login(username, password)
+
+# server.sendmail(username, recipient1, 'Case study script is done')
+# server.sendmail(username, recipient2, 'Case study script is done')
+# server.sendmail(username, recipient3, 'Case study script is done')
+
+dfTest2 = pd.merge(dfTest, census, left_on = "co_no", right_on = "COUNTY")
+
+dfTest2.residential
+
+dfTest2.columns[0:100]
+dfTest2.columns[101:201]
+
+dfTest2.const_class.value_counts()
+=======
 >>>>>>> master
 # server = smtplib.SMTP("smtp.gmail.com", 587)
 # server.starttls()
@@ -216,4 +241,5 @@ dfTest.to_csv('miami_cleaned.csv')
 =======
 
 dfTest.to_csv('df.csv')
+>>>>>>> master
 >>>>>>> master
