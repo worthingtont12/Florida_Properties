@@ -167,6 +167,9 @@ dfTest.cap = dfTest.landuse.apply(lambda row: in_range(row, 98, 99))
 # type = Non-Agricultural Acreage Property
 dfTest.naap = dfTest.landuse.apply(lambda row: in_range(row, 99, 100))
 
+######## Deleting '100's from Sales Price 1
+dfTest.sale_prc1 = dfTest.sale_prc1.replace('100', np.nan)
+
 # difference between sale price and just value
 dfTest.diff_btwn_prc_jv = (dfTest.sale_prc1 - dfTest.jv)
 dfTest.diff_pct = ((dfTest.diff_btwn_prc_jv / dfTest.jv) * 100)
@@ -186,6 +189,17 @@ dfTest['sale_mo1'] = dfTest['sale_mo1'].astype('category')
 map_season = {1: "Winter", 2: "Winter", 3: "Spring", 4: "Spring", 5: "Spring", 6: "Summer", 7: "Summer",
               8: "Summer", 9: "Fall", 10: "Fall", 11: "Fall", 12: "Winter"}
 dfTest["sale_season1"] = dfTest["sale_mo1"].map(map_season)
+
+# Drop unnecessary columns
+dfTest = dfTest.drop(["app_stat","ass_dif_trns","ass_trnsfr_fg","atv_strt","av_class_use","av_consrv_lnd","av_hmstd",
+"av_non_hmstd_resd","av_nsd","av_resd_non_resd","av_sd","co_app_stat","cono_prv_hm","del_val","distr_cd","distr_yr","exmpt_01",
+"exmpt_02","exmpt_03","exmpt_05","exmpt_07","exmpt_08","exmpt_09","exmpt_15","exmpt_16","exmpt_17","exmpt_18","exmpt_20",
+"exmpt_26","exmpt_31","exmpt_32","exmpt_33","exmpt_34","exmpt_35","exmpt_39","exmpt_80","exmpt_81","file_t","grp_no",
+"jurisdiction","jv_chng","jv_chng_cd","jv_class_use","jv_consrv_lnd","jv_hmstd","jv_non_hmstd_resd","jv_resd_non_resd","multi_par_sal2",
+"nconst_val","or_book1","or_book2","or_page1","or_page2","own_addr1","own_addr2","own_city","own_name","own_state","own_zipcd",
+"par_splt","parcel","parcel_id_prv_hmstd","parcel_orig","prev_hmstd_own","qual_cd1","qual_cd2","rng","rng_orig","rs_id",
+"s_legal","sal_chng_cd2","sale_mo2","sale_prc2","sale_yr2","sec","sec_orig","seq_no","tax_auth_cd","taxauthc","tv_nsd","tv_sd",
+"twn","twn_orig","vi_cd2","yr_val_trnsf"], axis=1)
 
 # Email when finished
 >>>>>>> master
