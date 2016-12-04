@@ -308,5 +308,6 @@ census.drop(census[['Median income (dollars); Estimate; One race-- - American In
 
 # In[28]:
 
+census["census_tract"] = census['CENSUS_TRACT']
 # Write the census dataframe to CSV file
-census.to_csv('Data/FL_census.csv')
+# census.to_csv('Data/FL_census.csv')
