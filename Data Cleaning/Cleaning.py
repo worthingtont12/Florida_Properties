@@ -1,6 +1,16 @@
 """Clean up the data to make it easier to understand and use."""
 import pandas as pd
 import numpy as np
+<<<<<<< HEAD
+import re
+# import smtplib
+# from login_info import username, password, recipient1, recipient2, recipient3
+# Loading Data
+df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.dta',
+                   convert_categoricals=False)
+
+# #############Functions#####################
+=======
 import smtplib
 #from login_info import username, password, recipient1, recipient2, recipient3
 # Loading Data
@@ -9,18 +19,35 @@ df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.
 ##############Functions#####################
 # function that returns True if the value is not missing and returns False if it is missing
 # logic is reversed for use cases below
+>>>>>>> master
 
 
 def notna(obs):
+    """Returns True if the value is not missing and returns False if it is missing.
+    Logic is reversed for use cases below.
+    arguments:
+        obs:The observation of interest.
+    """
     if np.isnan(obs) == False:
         return True
     else:
         return False
 
+<<<<<<< HEAD
+
+def in_range(obs, range_start, range_end):
+    """Returns True if observation is in range specified.
+    arguments:
+        obs:The observation of interest.
+        range_start:Start of range.Range is zero indexed.
+        range_end:End of range.Range is zero indexed.
+    """
+=======
 # function that returns true if obs is in range specified
 
 
 def in_range(obs, range_start, range_end):
+>>>>>>> master
     if obs in range(range_start, range_end):
         return True
     else:
@@ -60,12 +87,22 @@ map_landuse = {0: "Vacant Residential", 1: "Single Family", 2: "Mobile Homes", 3
                97: "Outdoor recreational or parkland, or high-water recharge subject to classified use assessment.", 98: "Centrally assessed Non-Agricultural Acreage Property", 99: "Acreage not zoned agricultural with or without extra features"}
 
 df["landuse_explained"] = df["landuse"].map(map_landuse)
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 # subsetting for observation for when a sale was made in 2014
 dfTest = df[~pd.isnull(df.sale_prc1)]
 dfTest = dfTest[dfTest.sale_yr1 == 2014]
 
+# if all obs are missing drop column
 dfTest = dfTest.dropna(axis=1, how='all').copy()
 
+<<<<<<< HEAD
+# #############Feature Creation#############
+# number of years since sale
+dfTest.years_since_last_sale = (dfTest.sale_yr1.astype('float') - dfTest.sale_yr2.astype('float'))
+=======
 # combining year and month into one string
 # year 1 month 1
 dfTest.sale_yr1 = dfTest[['sale_yr1']].astype('int').astype('str')
@@ -83,37 +120,45 @@ dfTest.saledate = dfTest.saledate.apply(pd.to_datetime)
 ##############Feature Creation#############
 # number of years since sale
 dfTest.years_since_last_sale = (dfTest.sale_yr1 - dfTest.sale_yr2)
+>>>>>>> master
 
 # dummy varible for if sold before
 dfTest.sold_before = dfTest.eff_yr_blt.apply(notna)
 
 # Effective age of property
+<<<<<<< HEAD
+dfTest.eff_age = (dfTest.sale_yr1.astype('float') - dfTest.eff_yr_blt.astype('float'))
+
+# Actual age of property
+dfTest.act_age = (dfTest.sale_yr1.astype('float') - dfTest.act_yr_blt.astype('float'))
+=======
 dfTest.eff_age = (dfTest.sale_yr1 - dfTest.eff_yr_blt)
 
 # Actual age of property
 dfTest.act_age = (dfTest.sale_yr1 - dfTest.act_yr_blt)
+>>>>>>> master
 
 # recoding landuse to dummy variables
 dfTest.landuse = dfTest.landuse.astype(int)
-#type = residential
+# type = residential
 dfTest.residential = dfTest.landuse.apply(lambda row: in_range(row, 0, 10))
 
-#type = commercial
+# type = commercial
 dfTest.commercial = dfTest.landuse.apply(lambda row: in_range(row, 10, 40))
 
-#type = industrial
+# type = industrial
 dfTest.industrial = dfTest.landuse.apply(lambda row: in_range(row, 40, 50))
 
-#type = agricultural
+# type = agricultural
 dfTest.agricultural = dfTest.landuse.apply(lambda row: in_range(row, 50, 70))
 
-#type = institutional
+# type = institutional
 dfTest.institutional = dfTest.landuse.apply(lambda row: in_range(row, 70, 80))
 
-#type = government
+# type = government
 dfTest.government = dfTest.landuse.apply(lambda row: in_range(row, 80, 90))
 
-#type = miscellaneous
+# type = miscellaneous
 dfTest.miscellaneous = dfTest.landuse.apply(lambda row: in_range(row, 90, 97))
 
 # type = Centrally Assessed Property
@@ -125,6 +170,12 @@ dfTest.naap = dfTest.landuse.apply(lambda row: in_range(row, 99, 100))
 # difference between sale price and just value
 dfTest.diff_btwn_prc_jv = (dfTest.sale_prc1 - dfTest.jv)
 dfTest.diff_pct = ((dfTest.diff_btwn_prc_jv / dfTest.jv) * 100)
+<<<<<<< HEAD
+
+# number of days since last sale
+#
+# # Email when finished
+=======
 # Compute mean for census block 'Just Value' and add as column in dataframe; currently mean is based off properties in CB WITH
 # same landuse code
 dfTest['Blk_Val'] = dfTest_cb.groupby([dfTest_cb['census_bk'], dfTest_cb['landuse']])[
@@ -137,6 +188,7 @@ map_season = {1: "Winter", 2: "Winter", 3: "Spring", 4: "Spring", 5: "Spring", 6
 dfTest["sale_season1"] = dfTest["sale_mo1"].map(map_season)
 
 # Email when finished
+>>>>>>> master
 # server = smtplib.SMTP("smtp.gmail.com", 587)
 # server.starttls()
 #
@@ -145,5 +197,9 @@ dfTest["sale_season1"] = dfTest["sale_mo1"].map(map_season)
 # server.sendmail(username, recipient1, 'Case study script is done')
 # server.sendmail(username, recipient2, 'Case study script is done')
 # server.sendmail(username, recipient3, 'Case study script is done')
+<<<<<<< HEAD
+dfTest.to_csv('miami_cleaned.csv')
+=======
 
 dfTest.to_csv('df.csv')
+>>>>>>> master
