@@ -1,7 +1,7 @@
 """Clean up the data to make it easier to understand and use."""
 import pandas as pd
 import numpy as np
-from FL_census_2010_import_and_cleaning import census
+from FL_Census_Tract import census
 # import smtplib
 # from login_info import username, password, recipient1, recipient2, recipient3
 # Loading Data
@@ -149,7 +149,7 @@ dfTest.diff_pct = ((dfTest.diff_btwn_prc_jv / dfTest.jv) * 100)
 
 # Compute mean for census block 'Just Value' and add as column in dataframe; currently mean is based off properties in CB WITH
 # same landuse code
-dfTest['Blk_Val'] = dfTest_cb.groupby([dfTest_cb['census_bk'], dfTest_cb['landuse']])[
+dfTest['Blk_Val'] = dfTest.groupby([dfTest['census_bk'], dfTest['landuse']])[
     'jv'].transform('mean')
 
 
