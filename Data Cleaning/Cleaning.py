@@ -1,6 +1,7 @@
 """Clean up the data to make it easier to understand and use."""
 import pandas as pd
 import numpy as np
+<<<<<<< HEAD
 import re
 # import smtplib
 # from login_info import username, password, recipient1, recipient2, recipient3
@@ -9,6 +10,22 @@ df = pd.read_stata('/Volumes/Seagate Backup Plus Drive/NAL/NAL2014/nal23rts2014.
                    convert_categoricals=False)
 
 # #############Functions#####################
+=======
+import smtplib
+<<<<<<< HEAD
+from FL_census_2010_import_and_cleaning import census
+
+# from login_info import username, password, recipient1, recipient2, recipient3
+=======
+#from login_info import username, password, recipient1, recipient2, recipient3
+>>>>>>> master
+# Loading Data
+df = pd.read_stata('C:/Users/hexel/Documents/R/SYS6018/CaseFinal/NAL2014/nal23rts2014.dta',
+                   convert_categoricals=False)
+##############Functions#####################
+# function that returns True if the value is not missing and returns False if it is missing
+# logic is reversed for use cases below
+>>>>>>> master
 
 
 def notna(obs):
@@ -22,6 +39,7 @@ def notna(obs):
     else:
         return False
 
+<<<<<<< HEAD
 
 def in_range(obs, range_start, range_end):
     """Returns True if observation is in range specified.
@@ -30,6 +48,12 @@ def in_range(obs, range_start, range_end):
         range_start:Start of range.Range is zero indexed.
         range_end:End of range.Range is zero indexed.
     """
+=======
+# function that returns true if obs is in range specified
+
+
+def in_range(obs, range_start, range_end):
+>>>>>>> master
     if obs in range(range_start, range_end):
         return True
     else:
@@ -69,7 +93,10 @@ map_landuse = {0: "Vacant Residential", 1: "Single Family", 2: "Mobile Homes", 3
                97: "Outdoor recreational or parkland, or high-water recharge subject to classified use assessment.", 98: "Centrally assessed Non-Agricultural Acreage Property", 99: "Acreage not zoned agricultural with or without extra features"}
 
 df["landuse_explained"] = df["landuse"].map(map_landuse)
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 # subsetting for observation for when a sale was made in 2014
 dfTest = df[~pd.isnull(df.sale_prc1)]
 dfTest = dfTest[dfTest.sale_yr1 == 2014]
@@ -77,18 +104,45 @@ dfTest = dfTest[dfTest.sale_yr1 == 2014]
 # if all obs are missing drop column
 dfTest = dfTest.dropna(axis=1, how='all').copy()
 
+<<<<<<< HEAD
 # #############Feature Creation#############
 # number of years since sale
 dfTest.years_since_last_sale = (dfTest.sale_yr1.astype('float') - dfTest.sale_yr2.astype('float'))
+=======
+# combining year and month into one string
+# year 1 month 1
+dfTest.sale_yr1 = dfTest[['sale_yr1']].astype('int').astype('str')
+dfTest.sale_mo1 = dfTest[['sale_mo1']].astype('int').astype('str')
+dfTest.saledate = dfTest[['sale_mo1', 'sale_yr1']].apply(lambda x: '/'.join(x), axis=1)
+
+# year 2 month 2
+dfTest.sale_yr2 = dfTest[['sale_yr2']].astype('int').astype('str')
+dfTest.sale_mo2 = dfTest[['sale_mo2']].astype('int').astype('str')
+dfTest.saledate2 = dfTest[['sale_mo2', 'sale_yr2']].apply(lambda x: '/'.join(x), axis=1)
+
+# converting to date time
+dfTest.saledate = dfTest.saledate.apply(pd.to_datetime)
+
+##############Feature Creation#############
+# number of years since sale
+dfTest.years_since_last_sale = (dfTest.sale_yr1 - dfTest.sale_yr2)
+>>>>>>> master
 
 # dummy varible for if sold before
 dfTest.sold_before = dfTest.eff_yr_blt.apply(notna)
 
 # Effective age of property
+<<<<<<< HEAD
 dfTest.eff_age = (dfTest.sale_yr1.astype('float') - dfTest.eff_yr_blt.astype('float'))
 
 # Actual age of property
 dfTest.act_age = (dfTest.sale_yr1.astype('float') - dfTest.act_yr_blt.astype('float'))
+=======
+dfTest.eff_age = (dfTest.sale_yr1 - dfTest.eff_yr_blt)
+
+# Actual age of property
+dfTest.act_age = (dfTest.sale_yr1 - dfTest.act_yr_blt)
+>>>>>>> master
 
 # recoding landuse to dummy variables
 dfTest.landuse = dfTest.landuse.astype(int)
@@ -119,13 +173,61 @@ dfTest.cap = dfTest.landuse.apply(lambda row: in_range(row, 98, 99))
 # type = Non-Agricultural Acreage Property
 dfTest.naap = dfTest.landuse.apply(lambda row: in_range(row, 99, 100))
 
+######## Deleting '100's from Sales Price 1
+dfTest.sale_prc1 = dfTest.sale_prc1.replace('100', np.nan)
+
 # difference between sale price and just value
 dfTest.diff_btwn_prc_jv = (dfTest.sale_prc1 - dfTest.jv)
 dfTest.diff_pct = ((dfTest.diff_btwn_prc_jv / dfTest.jv) * 100)
+<<<<<<< HEAD
 
 # number of days since last sale
 #
 # # Email when finished
+=======
+# Compute mean for census block 'Just Value' and add as column in dataframe; currently mean is based off properties in CB WITH
+# same landuse code
+dfTest['Blk_Val'] = dfTest_cb.groupby([dfTest_cb['census_bk'], dfTest_cb['landuse']])[
+    'jv'].transform('mean')
+
+# Compute season-of-sale
+dfTest['sale_mo1'] = dfTest['sale_mo1'].astype('category')
+map_season = {1: "Winter", 2: "Winter", 3: "Spring", 4: "Spring", 5: "Spring", 6: "Summer", 7: "Summer",
+              8: "Summer", 9: "Fall", 10: "Fall", 11: "Fall", 12: "Winter"}
+dfTest["sale_season1"] = dfTest["sale_mo1"].map(map_season)
+
+# Drop unnecessary columns
+dfTest = dfTest.drop(["app_stat","ass_dif_trns","ass_trnsfr_fg","atv_strt","av_class_use","av_consrv_lnd","av_hmstd",
+"av_non_hmstd_resd","av_nsd","av_resd_non_resd","av_sd","co_app_stat","cono_prv_hm","del_val","distr_cd","distr_yr","exmpt_01",
+"exmpt_02","exmpt_03","exmpt_05","exmpt_07","exmpt_08","exmpt_09","exmpt_15","exmpt_16","exmpt_17","exmpt_18","exmpt_20",
+"exmpt_26","exmpt_31","exmpt_32","exmpt_33","exmpt_34","exmpt_35","exmpt_39","exmpt_80","exmpt_81","file_t","grp_no",
+"jurisdiction","jv_chng","jv_chng_cd","jv_class_use","jv_consrv_lnd","jv_hmstd","jv_non_hmstd_resd","jv_resd_non_resd","multi_par_sal2",
+"nconst_val","or_book1","or_book2","or_page1","or_page2","own_addr1","own_addr2","own_city","own_name","own_state","own_zipcd",
+"par_splt","parcel","parcel_id_prv_hmstd","parcel_orig","prev_hmstd_own","qual_cd1","qual_cd2","rng","rng_orig","rs_id",
+"s_legal","sal_chng_cd2","sale_mo2","sale_prc2","sale_yr2","sec","sec_orig","seq_no","tax_auth_cd","taxauthc","tv_nsd","tv_sd",
+"twn","twn_orig","vi_cd2","yr_val_trnsf"], axis=1)
+
+# Email when finished
+<<<<<<< HEAD
+# server = smtplib.SMTP("smtp.gmail.com", 587)
+# server.starttls()
+
+# server.login(username, password)
+
+# server.sendmail(username, recipient1, 'Case study script is done')
+# server.sendmail(username, recipient2, 'Case study script is done')
+# server.sendmail(username, recipient3, 'Case study script is done')
+
+dfTest2 = pd.merge(dfTest, census, left_on = "co_no", right_on = "COUNTY")
+
+dfTest2.residential
+
+dfTest2.columns[0:100]
+dfTest2.columns[101:201]
+
+dfTest2.const_class.value_counts()
+=======
+>>>>>>> master
 # server = smtplib.SMTP("smtp.gmail.com", 587)
 # server.starttls()
 #
@@ -134,4 +236,10 @@ dfTest.diff_pct = ((dfTest.diff_btwn_prc_jv / dfTest.jv) * 100)
 # server.sendmail(username, recipient1, 'Case study script is done')
 # server.sendmail(username, recipient2, 'Case study script is done')
 # server.sendmail(username, recipient3, 'Case study script is done')
+<<<<<<< HEAD
 dfTest.to_csv('miami_cleaned.csv')
+=======
+
+dfTest.to_csv('df.csv')
+>>>>>>> master
+>>>>>>> master
