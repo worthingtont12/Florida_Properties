@@ -8,7 +8,16 @@ from FL_Census_Tract import census
 
 df = pd.read_stata("/Volumes/Tyler's External Hard Drive/NAL2014/nal23rts2014.dta",
                    convert_categoricals=False)
+# Import all years
+listdf = []
+for i in range(11, 78):
+    df = pd.read_stata("/Volumes/Tyler's External Hard Drive/NAL2014/nal" +
+                       str(i) + "rts2014.dta", convert_categoricals=False, convert_missing=True)
+    df['County_Code'] = i
+    listdf.append(df)
+yeardf = pd.concat(listdf)
 
+df = yeardf
 # #############Functions#####################
 
 
@@ -44,7 +53,7 @@ def remove_last_character(string, number):
     string : A string.
     number : Number of characters to be removed.
     """
-    string = string.astype('float').astype('str')
+    string = string
     string = string[:-number]
     return string
 
@@ -176,15 +185,11 @@ dfTest = dfTest.drop(["app_stat", "ass_dif_trns", "ass_trnsfr_fg", "atv_strt", "
                       "twn", "twn_orig", "vi_cd2", "yr_val_trnsf"], axis=1)
 
 # Creating Census Tract for Merging
-df['census_tract'] = df['census_bk'].apply(lambda row: remove_last_character(row, 3))
+dfTest['census_tract'] = dfTest['census_bk'].astype('float').astype(
+    'str').apply(lambda row: remove_last_character(row, 3))
 
 # Merging dfs
 dfTest2 = pd.merge(dfTest, census, on="census_tract")
-
-dfTest2.residential
-
-dfTest2.columns[0:100]
-dfTest2.columns[101:201]
 
 print(dfTest.head(5))
 
@@ -199,4 +204,4 @@ print(dfTest.head(5))
 # server.sendmail(username, recipient3, 'Case study script is done')
 
 
-# dfTest.to_csv('miami_cleaned.csv')
+dfTest.to_csv('florida_cleaned.csv')
