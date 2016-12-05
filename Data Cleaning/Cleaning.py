@@ -9,7 +9,7 @@ from FL_Census_Tract import census
 listdf = []
 for i in range(11, 78):
     dftmp = pd.read_stata("/Volumes/Tyler's External Hard Drive/NAL2014/nal" +
-                          str(i) + "rts2014.dta", convert_categoricals=False, convert_missing=True)
+                          str(i) + "rts2014.dta", convert_categoricals=False)
     dftmp['County_Code'] = i
     listdf.append(dftmp)
 yeardf = pd.concat(listdf)
