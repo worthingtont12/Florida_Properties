@@ -171,15 +171,16 @@ dfTest['Blk_Val'] = dfTest.groupby([dfTest['census_bk'], dfTest['landuse']])[
     'jv'].transform('mean')
 
 # Drop unnecessary columns
-dfTest = dfTest.drop(["app_stat", "ass_dif_trns", "ass_trnsfr_fg", "atv_strt", "av_class_use", "av_consrv_lnd", "av_hmstd",
-                      "av_non_hmstd_resd", "av_nsd", "av_resd_non_resd", "av_sd", "co_app_stat", "cono_prv_hm", "del_val", "distr_cd", "distr_yr", "exmpt_01",
-                      "exmpt_02", "exmpt_03", "exmpt_05", "exmpt_07", "exmpt_08", "exmpt_09", "exmpt_15", "exmpt_16", "exmpt_17", "exmpt_18", "exmpt_20",
-                      "exmpt_26", "exmpt_31", "exmpt_32", "exmpt_33", "exmpt_34", "exmpt_35", "exmpt_39", "exmpt_80", "exmpt_81", "file_t", "grp_no", "jv_chng",
-                      "jv_chng_cd", "jv_class_use", "jv_consrv_lnd", "jv_hmstd", "jv_non_hmstd_resd", "jv_resd_non_resd", "multi_par_sal2",
-                      "nconst_val", "or_book1", "or_book2", "or_page1", "or_page2", "own_addr1", "own_addr2", "own_city", "own_name", "own_state", "own_zipcd",
-                      "par_splt", "parcel", "parcel_id_prv_hmstd", "parcel_orig", "prev_hmstd_own", "qual_cd1", "qual_cd2", "rng", "rng_orig", "rs_id",
-                      "s_legal", "sec", "sec_orig", "seq_no", "tax_auth_cd", "taxauthc", "tv_nsd", "tv_sd",
-                      "twn", "twn_orig", "vi_cd2", "yr_val_trnsf"], axis=1)
+dfTest.drop(["app_stat", "ass_dif_trns", "ass_trnsfr_fg", "atv_strt", "av_class_use", "av_consrv_lnd", "av_hmstd",
+             "av_non_hmstd_resd", "av_nsd", "av_resd_non_resd", "av_sd", "co_app_stat", "cono_prv_hm", "del_val", "distr_cd", "distr_yr", "exmpt_01",
+             "exmpt_02", "exmpt_03", "exmpt_05", "exmpt_07", "exmpt_08", "exmpt_09", "exmpt_15", "exmpt_16", "exmpt_17", "exmpt_18", "exmpt_20",
+             "exmpt_26", "exmpt_31", "exmpt_32", "exmpt_33", "exmpt_34", "exmpt_35", "exmpt_39", "exmpt_80", "exmpt_81", "file_t", "grp_no", "jv_chng",
+             "jv_chng_cd", "jv_class_use", "jv_consrv_lnd", "jv_hmstd", "jv_non_hmstd_resd", "jv_resd_non_resd", "multi_par_sal2",
+             "nconst_val", "or_book1", "or_book2", "or_page1", "or_page2", "own_addr1", "own_addr2", "own_city", "own_name", "own_state", "own_zipcd",
+             "par_splt", "parcel", "parcel_id_prv_hmstd", "parcel_orig", "prev_hmstd_own", "qual_cd1", "qual_cd2", "rng", "rng_orig", "rs_id",
+             "s_legal", "sec", "sec_orig", "seq_no", "tax_auth_cd", "taxauthc", "tv_nsd", "tv_sd",
+             "twn", "twn_orig", "vi_cd2", "yr_val_trnsf"], inplace=True,
+            axis=1)
 
 # Creating Census Tract for Merging
 dfTest['census_tract'] = dfTest['census_bk'].astype('float').astype(
@@ -188,7 +189,7 @@ dfTest['census_tract'] = dfTest['census_bk'].astype('float').astype(
 # Merging dfs
 dfTest2 = pd.merge(dfTest, census, on="census_tract")
 
-print(dfTest.head(5))
+print(dfTest2.head(5))
 
 # email when done
 # server = smtplib.SMTP("smtp.gmail.com", 587)
@@ -201,4 +202,4 @@ print(dfTest.head(5))
 # server.sendmail(username, recipient3, 'Case study script is done')
 
 
-dfTest.to_csv('florida_cleaned.csv')
+dfTest2.to_csv('florida_cleaned.csv')
