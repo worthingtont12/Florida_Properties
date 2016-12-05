@@ -5,16 +5,13 @@ from FL_Census_Tract import census
 # import smtplib
 # from login_info import username, password, recipient1, recipient2, recipient3
 # Loading Data
-
-df = pd.read_stata("/Volumes/Tyler's External Hard Drive/NAL2014/nal23rts2014.dta",
-                   convert_categoricals=False)
 # Import all years
 listdf = []
 for i in range(11, 78):
-    df = pd.read_stata("/Volumes/Tyler's External Hard Drive/NAL2014/nal" +
-                       str(i) + "rts2014.dta", convert_categoricals=False, convert_missing=True)
-    df['County_Code'] = i
-    listdf.append(df)
+    dftmp = pd.read_stata("/Volumes/Tyler's External Hard Drive/NAL2014/nal" +
+                          str(i) + "rts2014.dta", convert_categoricals=False, convert_missing=True)
+    dftmp['County_Code'] = i
+    listdf.append(dftmp)
 yeardf = pd.concat(listdf)
 
 df = yeardf
