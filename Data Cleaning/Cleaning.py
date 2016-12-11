@@ -187,7 +187,7 @@ dfTest['census_tract'] = dfTest['census_bk'].astype('float').astype(
     'str').apply(lambda row: remove_last_character(row, 3))
 
 # Merging dfs
-dfTest2 = pd.merge(dfTest, census, on="census_tract")
+dfTest2 = pd.merge(dfTest, census, on='census_tract')
 
 print(dfTest2.head(5))
 
