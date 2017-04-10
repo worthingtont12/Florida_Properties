@@ -2,9 +2,7 @@
 import pandas as pd
 import numpy as np
 from FL_Census_Tract import census
-# import smtplib
-# from login_info import username, password, recipient1, recipient2, recipient3
-# Loading Data
+
 # Import all years
 listdf = []
 for i in range(11, 78):
@@ -189,17 +187,5 @@ dfTest['census_tract'] = dfTest['census_bk'].astype('float').astype(
 # Merging dfs
 dfTest2 = pd.merge(dfTest, census, on='census_tract')
 
-print(dfTest2.head(5))
-
-# email when done
-# server = smtplib.SMTP("smtp.gmail.com", 587)
-# server.starttls()
-#
-# server.login(username, password)
-#
-# server.sendmail(username, recipient1, 'Case study script is done')
-# server.sendmail(username, recipient2, 'Case study script is done')
-# server.sendmail(username, recipient3, 'Case study script is done')
-
-
+#write out csv
 dfTest2.to_csv('florida_cleaned.csv')
